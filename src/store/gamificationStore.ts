@@ -90,17 +90,17 @@ export const useGamificationStore = create<GamificationState>((set) => ({
 
   awardXP: async (userId, xp) => {
     try {
-      const { data: profile } = await supabase
+      const { data: profile, error } = await supabase
         .from('profiles')
         .select('xp')
         .eq('id', userId)
         .single()
 
-      if (!profile) return
+      if (error || !profile) return
 
       await supabase
         .from('profiles')
-        .update({ xp: profile.xp + xp })
+        .update({ xp: (profile.xp || 0) + xp })
         .eq('id', userId)
     } catch (error) {
       console.error('Error awarding XP:', error)
@@ -109,13 +109,13 @@ export const useGamificationStore = create<GamificationState>((set) => ({
 
   updateStreak: async (userId) => {
     try {
-      const { data: profile } = await supabase
+      const { data: profile, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', userId)
         .single()
 
-      if (!profile) return
+      if (error || !profile) return
 
       const today = new Date()
       today.setHours(0, 0, 0, 0)
@@ -132,10 +132,10 @@ export const useGamificationStore = create<GamificationState>((set) => ({
         ? Math.floor((today.getTime() - lastActivity.getTime()) / (1000 * 60 * 60 * 24))
         : 0
 
-      let newStreakCount = profile.streak_count
+      let newStreakCount = profile.streak_count || 0
 
       if (!lastActivity || daysDiff === 1) {
-        newStreakCount = profile.streak_count + 1
+        newStreakCount = (profile.streak_count || 0) + 1
       } else if (daysDiff === 0) {
         return
       } else {

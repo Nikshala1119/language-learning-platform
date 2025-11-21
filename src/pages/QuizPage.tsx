@@ -175,7 +175,7 @@ export function QuizPage() {
     const scorePercent = (correctCount / totalCount) * 100
 
     try {
-      // Update progress
+      // Update progress with proper upsert
       await supabase
         .from('progress')
         .upsert({
@@ -184,6 +184,11 @@ export function QuizPage() {
           status: 'completed',
           score: scorePercent,
           completed_at: new Date().toISOString(),
+          attempts: 1, // Will be incremented on conflict
+          last_attempt_at: new Date().toISOString(),
+        }, {
+          onConflict: 'user_id,lesson_id',
+          ignoreDuplicates: false
         })
 
       // Award XP

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import type { Database } from '@/lib/database.types'
 import { Button } from '@/components/ui/button'
@@ -24,6 +25,7 @@ const QUESTION_TYPES = [
 ] as const
 
 export function QuestionsAdmin() {
+  const navigate = useNavigate()
   const [lessons, setLessons] = useState<Lesson[]>([])
   const [questions, setQuestions] = useState<Question[]>([])
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null)
@@ -95,10 +97,82 @@ export function QuestionsAdmin() {
     }
   }
 
+  const validateQuestion = (): string | null => {
+    // Validate based on question type
+    switch (formData.type) {
+      case 'multiple_choice':
+        const validOptions = formData.options.filter((o: string) => o.trim())
+        if (validOptions.length < 2) {
+          return 'Multiple choice questions need at least 2 options'
+        }
+        if (!formData.correct_answer || !formData.correct_answer.trim()) {
+          return 'Please provide a correct answer'
+        }
+        if (!validOptions.includes(formData.correct_answer.trim())) {
+          return 'Correct answer must match one of the options exactly'
+        }
+        break
+
+      case 'fill_blank':
+      case 'translation':
+      case 'listen_type':
+      case 'speak_record':
+        if (!formData.correct_answer || !formData.correct_answer.trim()) {
+          return 'Please provide a correct answer'
+        }
+        break
+
+      case 'match_pairs':
+        const validPairs = formData.pairs.filter((p: any) => p.left && p.right)
+        if (validPairs.length < 2) {
+          return 'Match pairs questions need at least 2 pairs'
+        }
+        // Check for duplicate left or right values
+        const leftValues = validPairs.map((p: any) => p.left.toLowerCase())
+        const rightValues = validPairs.map((p: any) => p.right.toLowerCase())
+        if (new Set(leftValues).size !== leftValues.length) {
+          return 'Left side values must be unique'
+        }
+        if (new Set(rightValues).size !== rightValues.length) {
+          return 'Right side values must be unique'
+        }
+        break
+
+      case 'word_order':
+        const validWords = formData.words.filter((w: string) => w.trim())
+        if (validWords.length < 2) {
+          return 'Word order questions need at least 2 words'
+        }
+        break
+
+      case 'image_select':
+        const validImages = formData.images.filter((i: string) => i.trim())
+        if (validImages.length < 2) {
+          return 'Image select questions need at least 2 images'
+        }
+        if (!formData.correct_answer || !formData.correct_answer.trim()) {
+          return 'Please provide the correct image URL'
+        }
+        if (!validImages.includes(formData.correct_answer.trim())) {
+          return 'Correct answer must match one of the image URLs exactly'
+        }
+        break
+    }
+
+    return null
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!selectedLesson) {
       alert('Please select a lesson first')
+      return
+    }
+
+    // Validate the question
+    const validationError = validateQuestion()
+    if (validationError) {
+      alert(validationError)
       return
     }
 
@@ -116,7 +190,7 @@ export function QuestionsAdmin() {
       switch (formData.type) {
         case 'multiple_choice':
           dataToSubmit.options = formData.options.filter((o: string) => o.trim())
-          dataToSubmit.correct_answer = formData.correct_answer
+          dataToSubmit.correct_answer = formData.correct_answer.trim()
           break
 
         case 'fill_blank':
@@ -338,7 +412,7 @@ export function QuestionsAdmin() {
             <p className="text-sm text-muted-foreground mb-4">
               Create a quiz-type lesson first before adding questions
             </p>
-            <Button onClick={() => window.location.href = '/admin/lessons'}>
+            <Button onClick={() => navigate('/admin/lessons')}>
               Go to Lessons
             </Button>
           </CardContent>

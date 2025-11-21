@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import type { Database } from '@/lib/database.types'
 import { Button } from '@/components/ui/button'
@@ -21,6 +22,7 @@ const LESSON_TYPES = [
 ] as const
 
 export function LessonsAdmin() {
+  const navigate = useNavigate()
   const [courses, setCourses] = useState<Course[]>([])
   const [units, setUnits] = useState<Unit[]>([])
   const [lessons, setLessons] = useState<Lesson[]>([])
@@ -257,7 +259,7 @@ export function LessonsAdmin() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <p className="text-muted-foreground mb-4">No courses available</p>
-            <Button onClick={() => window.location.href = '/admin/courses'}>
+            <Button onClick={() => navigate('/admin/courses')}>
               Go to Courses
             </Button>
           </CardContent>
@@ -272,7 +274,7 @@ export function LessonsAdmin() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <p className="text-muted-foreground mb-4">No units in this course</p>
-            <Button onClick={() => window.location.href = '/admin/units'}>
+            <Button onClick={() => navigate('/admin/units')}>
               Go to Units
             </Button>
           </CardContent>

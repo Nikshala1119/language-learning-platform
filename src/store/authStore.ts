@@ -111,21 +111,15 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         options: {
           data: {
             full_name: fullName,
+            role: 'student',
           },
         },
       })
 
       if (error) return { error }
 
-      if (data.user) {
-        await supabase
-          .from('profiles')
-          .update({
-            full_name: fullName,
-            login_enabled: false // New students require admin approval to login
-          })
-          .eq('id', data.user.id)
-      }
+      // Profile is automatically created by handle_new_user trigger
+      // with login_enabled = true by default
 
       return { error: null }
     } catch (error) {

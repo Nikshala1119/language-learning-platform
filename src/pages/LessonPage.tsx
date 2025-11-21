@@ -64,19 +64,22 @@ export function LessonPage() {
       if (error) throw error
       setProgress(data)
 
-      // If no progress exists, create it
+      // If no progress exists, create it using upsert
       if (!data) {
-        const { data: newProgress, error: insertError } = await supabase
+        const { data: newProgress, error: upsertError } = await supabase
           .from('progress')
-          .insert({
+          .upsert({
             user_id: user.id,
             lesson_id: lessonId,
             status: 'in_progress',
+          }, {
+            onConflict: 'user_id,lesson_id',
+            ignoreDuplicates: false
           })
           .select()
           .single()
 
-        if (!insertError) {
+        if (!upsertError) {
           setProgress(newProgress)
         }
       }
@@ -90,16 +93,20 @@ export function LessonPage() {
 
     setCompleting(true)
     try {
-      // Update progress to completed
+      // Update progress to completed using upsert
       const { error: progressError } = await supabase
         .from('progress')
-        .update({
+        .upsert({
+          user_id: user.id,
+          lesson_id: lessonId,
           status: 'completed',
           score: 100,
           completed_at: new Date().toISOString(),
+          last_attempt_at: new Date().toISOString(),
+        }, {
+          onConflict: 'user_id,lesson_id',
+          ignoreDuplicates: false
         })
-        .eq('user_id', user.id)
-        .eq('lesson_id', lessonId)
 
       if (progressError) throw progressError
 

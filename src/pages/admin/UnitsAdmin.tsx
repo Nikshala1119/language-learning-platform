@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import type { Database } from '@/lib/database.types'
 import { Button } from '@/components/ui/button'
@@ -13,6 +14,7 @@ type Unit = Database['public']['Tables']['units']['Row']
 type UnitInsert = Database['public']['Tables']['units']['Insert']
 
 export function UnitsAdmin() {
+  const navigate = useNavigate()
   const [courses, setCourses] = useState<Course[]>([])
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null)
   const [units, setUnits] = useState<Unit[]>([])
@@ -173,7 +175,7 @@ export function UnitsAdmin() {
             <p className="text-sm text-muted-foreground mb-4">
               Create a course first before adding units
             </p>
-            <Button onClick={() => window.location.href = '/admin/courses'}>
+            <Button onClick={() => navigate('/admin/courses')}>
               Go to Courses
             </Button>
           </CardContent>

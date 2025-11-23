@@ -449,6 +449,38 @@ export interface Database {
           created_at?: string
         }
       }
+      course_access: {
+        Row: {
+          id: string
+          user_id: string
+          course_id: string
+          granted_by: string | null
+          granted_at: string | null
+          expires_at: string | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          course_id: string
+          granted_by?: string | null
+          granted_at?: string | null
+          expires_at?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          course_id?: string
+          granted_by?: string | null
+          granted_at?: string | null
+          expires_at?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+      }
     }
     Views: {
       leaderboard: {
@@ -461,9 +493,40 @@ export interface Database {
           rank: number
         }
       }
+      course_access_overview: {
+        Row: {
+          id: string | null
+          user_id: string | null
+          user_email: string | null
+          user_name: string | null
+          course_id: string | null
+          course_title: string | null
+          granted_by: string | null
+          granted_by_email: string | null
+          granted_by_name: string | null
+          granted_at: string | null
+          expires_at: string | null
+          access_status: string | null
+        }
+      }
     }
     Functions: {
-      [_ in never]: never
+      grant_course_access: {
+        Args: { p_user_id: string; p_course_id: string; p_expires_at?: string }
+        Returns: string
+      }
+      revoke_course_access: {
+        Args: { p_user_id: string; p_course_id: string }
+        Returns: boolean
+      }
+      grant_course_access_bulk: {
+        Args: { p_user_ids: string[]; p_course_id: string; p_expires_at?: string }
+        Returns: number
+      }
+      has_course_access: {
+        Args: { p_user_id: string; p_course_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

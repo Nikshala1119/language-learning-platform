@@ -8,6 +8,7 @@ import { QuestionsAdmin } from './QuestionsAdmin'
 import { StudentsAdmin } from './StudentsAdmin'
 import { MediaLibrary } from './MediaLibrary'
 import { AnalyticsDashboard } from './AnalyticsDashboard'
+import { CourseAccessAdmin } from './CourseAccessAdmin'
 
 export function AdminPanel() {
   return (
@@ -61,6 +62,12 @@ export function AdminPanel() {
             Students
           </Link>
           <Link
+            to="/admin/course-access"
+            className="block px-3 py-2 rounded hover:bg-accent transition-colors"
+          >
+            Course Access
+          </Link>
+          <Link
             to="/admin/analytics"
             className="block px-3 py-2 rounded hover:bg-accent transition-colors"
           >
@@ -84,6 +91,7 @@ export function AdminPanel() {
           <Route path="lessons" element={<LessonsAdmin />} />
           <Route path="questions" element={<QuestionsAdmin />} />
           <Route path="students" element={<StudentsAdmin />} />
+          <Route path="course-access" element={<CourseAccessAdmin />} />
           <Route path="analytics" element={<AnalyticsDashboard />} />
           <Route path="media" element={<MediaLibrary />} />
         </Routes>
@@ -138,6 +146,9 @@ function AdminOverview() {
             </Button>
             <Button variant="outline" asChild>
               <Link to="/admin/students">Manage Students</Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link to="/admin/course-access">Manage Course Access</Link>
             </Button>
             <Button variant="outline" asChild>
               <Link to="/admin/analytics">View Analytics</Link>

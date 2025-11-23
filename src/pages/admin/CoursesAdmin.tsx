@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import type { Database } from '@/lib/database.types'
 import { Button } from '@/components/ui/button'
@@ -6,12 +7,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import { Pencil, Trash2, Plus, Eye, EyeOff } from 'lucide-react'
+import { Pencil, Trash2, Plus, Eye, EyeOff, Users } from 'lucide-react'
 
 type Course = Database['public']['Tables']['courses']['Row']
 type CourseInsert = Database['public']['Tables']['courses']['Insert']
 
 export function CoursesAdmin() {
+  const navigate = useNavigate()
   const [courses, setCourses] = useState<Course[]>([])
   const [loading, setLoading] = useState(true)
   const [editingCourse, setEditingCourse] = useState<Course | null>(null)
@@ -317,6 +319,15 @@ export function CoursesAdmin() {
                 </div>
 
                 <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate('/admin/course-access')}
+                    title="Manage student access"
+                  >
+                    <Users className="w-4 h-4 mr-1" />
+                    Access
+                  </Button>
                   <Button
                     variant="ghost"
                     size="sm"

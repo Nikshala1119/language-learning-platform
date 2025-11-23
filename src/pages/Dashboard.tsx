@@ -7,11 +7,13 @@ import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
+import { Menu, X } from 'lucide-react'
 
 export function Dashboard() {
   const { profile, signOut } = useAuthStore()
   const { courses, fetchCourses } = useCourseStore()
   const [signingOut, setSigningOut] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     fetchCourses()
@@ -32,43 +34,87 @@ export function Dashboard() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b">
+      <header className="border-b sticky top-0 bg-background z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold">Language Learning Platform</h1>
-              <p className="text-sm text-muted-foreground">Welcome back, {profile?.full_name || 'Learner'}!</p>
+            <div className="flex-1 min-w-0">
+              <h1 className="text-lg sm:text-2xl font-bold truncate">Language Learning Platform</h1>
+              <p className="text-xs sm:text-sm text-muted-foreground truncate">Welcome back, {profile?.full_name || 'Learner'}!</p>
             </div>
-            <div className="flex items-center gap-4">
+
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center gap-2">
               <Link to="/leaderboard">
-                <Button variant="ghost">Leaderboard</Button>
+                <Button variant="ghost" size="sm">Leaderboard</Button>
               </Link>
               <Link to="/social">
-                <Button variant="ghost">Social</Button>
+                <Button variant="ghost" size="sm">Social</Button>
               </Link>
               <Link to="/profile">
-                <Button variant="ghost">Profile</Button>
+                <Button variant="ghost" size="sm">Profile</Button>
               </Link>
               {profile?.role === 'admin' && (
                 <Link to="/admin">
-                  <Button variant="outline">Admin Panel</Button>
+                  <Button variant="outline" size="sm">Admin Panel</Button>
                 </Link>
               )}
               <Button
                 variant="ghost"
+                size="sm"
                 onClick={handleSignOut}
                 disabled={signingOut}
               >
                 {signingOut ? 'Signing out...' : 'Sign Out'}
               </Button>
             </div>
+
+            {/* Mobile Menu Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="lg:hidden ml-2"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </Button>
           </div>
+
+          {/* Mobile Menu */}
+          {mobileMenuOpen && (
+            <div className="lg:hidden mt-4 pb-4 space-y-2">
+              <Link to="/leaderboard" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="ghost" className="w-full justify-start">Leaderboard</Button>
+              </Link>
+              <Link to="/social" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="ghost" className="w-full justify-start">Social</Button>
+              </Link>
+              <Link to="/profile" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="ghost" className="w-full justify-start">Profile</Button>
+              </Link>
+              {profile?.role === 'admin' && (
+                <Link to="/admin" onClick={() => setMobileMenuOpen(false)}>
+                  <Button variant="outline" className="w-full justify-start">Admin Panel</Button>
+                </Link>
+              )}
+              <Button
+                variant="ghost"
+                className="w-full justify-start"
+                onClick={() => {
+                  handleSignOut()
+                  setMobileMenuOpen(false)
+                }}
+                disabled={signingOut}
+              >
+                {signingOut ? 'Signing out...' : 'Sign Out'}
+              </Button>
+            </div>
+          )}
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-4 sm:py-8">
         {/* Stats Bar */}
-        <div className="grid md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium">XP</CardTitle>
@@ -121,23 +167,23 @@ export function Dashboard() {
 
         {/* Courses Section */}
         <div>
-          <h2 className="text-xl font-semibold mb-4">My Courses</h2>
+          <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">My Courses</h2>
 
           {courses.length === 0 ? (
             <Card>
-              <CardContent className="flex flex-col items-center justify-center py-12">
-                <p className="text-lg text-muted-foreground mb-4">
+              <CardContent className="flex flex-col items-center justify-center py-8 sm:py-12 px-4">
+                <p className="text-base sm:text-lg text-muted-foreground mb-4 text-center">
                   No courses available yet
                 </p>
                 {profile?.role === 'admin' && (
                   <Link to="/admin">
-                    <Button>Create Your First Course</Button>
+                    <Button size="sm">Create Your First Course</Button>
                   </Link>
                 )}
               </CardContent>
             </Card>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {courses.map((course) => (
                 <Link key={course.id} to={`/course/${course.id}`}>
                   <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">

@@ -268,21 +268,21 @@ export function QuizPage() {
     const scorePercent = Math.round((correctCount / questions.length) * 100)
 
     return (
-      <div className="min-h-screen bg-background p-8">
+      <div className="min-h-screen bg-background p-4 sm:p-6 lg:p-8">
         <div className="container mx-auto max-w-2xl">
           <Card>
-            <CardContent className="py-12 text-center">
-              <CheckCircle className="w-16 h-16 mx-auto mb-4 text-primary" />
-              <h2 className="text-3xl font-bold mb-2">Quiz Complete!</h2>
-              <p className="text-xl mb-4">Your Score: {scorePercent}%</p>
-              <p className="text-muted-foreground mb-6">
+            <CardContent className="py-8 sm:py-12 text-center px-4">
+              <CheckCircle className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-primary" />
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">Quiz Complete!</h2>
+              <p className="text-lg sm:text-xl mb-3 sm:mb-4">Your Score: {scorePercent}%</p>
+              <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6">
                 You got {correctCount} out of {questions.length} questions correct
               </p>
-              <div className="flex gap-2 justify-center">
-                <Button onClick={() => navigate('/dashboard')}>
+              <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                <Button onClick={() => navigate('/dashboard')} className="w-full sm:w-auto">
                   Back to Dashboard
                 </Button>
-                <Button variant="outline" onClick={() => window.location.reload()}>
+                <Button variant="outline" onClick={() => window.location.reload()} className="w-full sm:w-auto">
                   Retake Quiz
                 </Button>
               </div>
@@ -296,16 +296,16 @@ export function QuizPage() {
   const progressPercent = ((currentQuestionIndex + 1) / questions.length) * 100
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8">
+    <div className="min-h-screen bg-background p-3 sm:p-4 lg:p-8">
       <div className="container mx-auto max-w-3xl">
         {/* Progress Bar */}
-        <Card className="mb-4">
-          <CardContent className="p-4">
+        <Card className="mb-3 sm:mb-4">
+          <CardContent className="p-3 sm:p-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium">
+              <span className="text-xs sm:text-sm font-medium">
                 Question {currentQuestionIndex + 1} of {questions.length}
               </span>
-              <span className="text-sm text-muted-foreground">
+              <span className="text-xs sm:text-sm text-muted-foreground">
                 {Math.round(progressPercent)}%
               </span>
             </div>
@@ -315,12 +315,12 @@ export function QuizPage() {
 
         {/* Question Card */}
         <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <Badge variant="outline">{currentQuestion.type.replace('_', ' ')}</Badge>
-              <Badge variant="secondary">+{currentQuestion.xp_reward} XP</Badge>
+          <CardHeader className="p-4 sm:p-6">
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              <Badge variant="outline" className="text-xs">{currentQuestion.type.replace('_', ' ')}</Badge>
+              <Badge variant="secondary" className="text-xs">+{currentQuestion.xp_reward} XP</Badge>
             </div>
-            <CardTitle className="text-2xl mt-4">{currentQuestion.question_text}</CardTitle>
+            <CardTitle className="text-lg sm:text-xl lg:text-2xl mt-3 sm:mt-4">{currentQuestion.question_text}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Multiple Choice */}
@@ -384,14 +384,14 @@ export function QuizPage() {
 
             {/* Match Pairs */}
             {currentQuestion.type === 'match_pairs' && (
-              <div className="space-y-3">
-                <p className="text-sm text-muted-foreground mb-2">
+              <div className="space-y-2 sm:space-y-3">
+                <p className="text-xs sm:text-sm text-muted-foreground mb-2">
                   Match the items from left to right:
                 </p>
                 {selectedPairs.map((pair, idx) => (
-                  <div key={idx} className="flex gap-2 items-center">
-                    <Input value={pair.left} readOnly className="flex-1 bg-muted" />
-                    <span className="text-muted-foreground">↔</span>
+                  <div key={idx} className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center">
+                    <Input value={pair.left} readOnly className="flex-1 bg-muted text-xs sm:text-sm" />
+                    <span className="text-muted-foreground text-center sm:text-left">↔</span>
                     <select
                       value={pair.right}
                       onChange={(e) => {
@@ -399,7 +399,7 @@ export function QuizPage() {
                         newPairs[idx].right = e.target.value
                         setSelectedPairs(newPairs)
                       }}
-                      className="flex h-10 w-full flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      className="flex h-10 w-full flex-1 rounded-md border border-input bg-background px-3 py-2 text-xs sm:text-sm"
                       disabled={showResult}
                     >
                       <option value="">-- Select match --</option>
@@ -417,10 +417,10 @@ export function QuizPage() {
             {/* Word Order */}
             {currentQuestion.type === 'word_order' && (
               <div className="space-y-2">
-                <p className="text-sm text-muted-foreground mb-2">
+                <p className="text-xs sm:text-sm text-muted-foreground mb-2">
                   Arrange the words in the correct order:
                 </p>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5 sm:gap-2">
                   {(currentQuestion.options as string[]).map((word, idx) => (
                     <Button
                       key={idx}
@@ -434,22 +434,23 @@ export function QuizPage() {
                         }
                       }}
                       disabled={showResult}
+                      className="text-xs sm:text-sm px-2 sm:px-3"
                     >
                       {word}
                       {orderedWords.includes(word) && ` (${orderedWords.indexOf(word) + 1})`}
                     </Button>
                   ))}
                 </div>
-                <div className="mt-4 p-3 bg-muted rounded">
-                  <p className="text-sm font-medium">Your order:</p>
-                  <p>{orderedWords.join(' ') || '(click words to order them)'}</p>
+                <div className="mt-3 sm:mt-4 p-2 sm:p-3 bg-muted rounded">
+                  <p className="text-xs sm:text-sm font-medium">Your order:</p>
+                  <p className="text-xs sm:text-sm">{orderedWords.join(' ') || '(click words to order them)'}</p>
                 </div>
               </div>
             )}
 
             {/* Image Select */}
             {currentQuestion.type === 'image_select' && (
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-2 sm:gap-4">
                 {(currentQuestion.options as string[]).map((imageUrl, idx) => (
                   <div
                     key={idx}
@@ -458,7 +459,7 @@ export function QuizPage() {
                       currentAnswer === imageUrl ? 'border-primary' : 'border-transparent'
                     }`}
                   >
-                    <img src={imageUrl} alt={`Option ${idx + 1}`} className="w-full h-40 object-cover" />
+                    <img src={imageUrl} alt={`Option ${idx + 1}`} className="w-full h-32 sm:h-40 object-cover" />
                   </div>
                 ))}
               </div>
@@ -467,24 +468,24 @@ export function QuizPage() {
             {/* Result */}
             {showResult && (
               <Card className={isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}>
-                <CardContent className="p-4">
-                  <div className="flex items-start gap-3">
+                <CardContent className="p-3 sm:p-4">
+                  <div className="flex items-start gap-2 sm:gap-3">
                     {isCorrect ? (
-                      <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0" />
+                      <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-green-600 flex-shrink-0" />
                     ) : (
-                      <XCircle className="w-6 h-6 text-red-600 flex-shrink-0" />
+                      <XCircle className="w-5 h-5 sm:w-6 sm:h-6 text-red-600 flex-shrink-0" />
                     )}
-                    <div>
-                      <p className="font-semibold mb-1">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm sm:text-base font-semibold mb-1">
                         {isCorrect ? 'Correct!' : 'Incorrect'}
                       </p>
                       {currentQuestion.explanation && (
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-xs sm:text-sm text-muted-foreground">
                           {currentQuestion.explanation}
                         </p>
                       )}
                       {!isCorrect && (
-                        <p className="text-sm mt-2">
+                        <p className="text-xs sm:text-sm mt-2">
                           Correct answer: {JSON.stringify(currentQuestion.correct_answer)}
                         </p>
                       )}
@@ -495,13 +496,14 @@ export function QuizPage() {
             )}
 
             {/* Navigation Buttons */}
-            <div className="flex gap-2 justify-between pt-4">
+            <div className="flex flex-col sm:flex-row gap-2 justify-between pt-3 sm:pt-4">
               <Button
                 variant="outline"
                 onClick={handlePrevious}
                 disabled={currentQuestionIndex === 0 || !showResult}
+                className="w-full sm:w-auto text-xs sm:text-sm"
               >
-                <ArrowLeft className="w-4 h-4 mr-2" />
+                <ArrowLeft className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
                 Previous
               </Button>
 
@@ -513,13 +515,14 @@ export function QuizPage() {
                     (currentQuestion.type === 'match_pairs' && selectedPairs.some(p => !p.right)) ||
                     (!['word_order', 'match_pairs'].includes(currentQuestion.type) && !currentAnswer)
                   }
+                  className="w-full sm:w-auto text-xs sm:text-sm"
                 >
                   Check Answer
                 </Button>
               ) : (
-                <Button onClick={handleNext}>
+                <Button onClick={handleNext} className="w-full sm:w-auto text-xs sm:text-sm">
                   {currentQuestionIndex === questions.length - 1 ? 'Finish Quiz' : 'Next'}
-                  <ArrowRight className="w-4 h-4 ml-2" />
+                  <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-2" />
                 </Button>
               )}
             </div>

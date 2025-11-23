@@ -147,20 +147,24 @@ export function UnitPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b">
-        <div className="container mx-auto px-4 py-4">
-          <Link to="/dashboard">
-            <Button variant="ghost">← Back to Dashboard</Button>
-          </Link>
+      <header className="border-b sticky top-0 bg-background z-50">
+        <div className="container mx-auto px-4 py-3 sm:py-4">
+          <div className="flex items-center justify-between">
+            <Link to="/dashboard">
+              <Button variant="ghost" size="sm">← Back</Button>
+            </Link>
+            <h1 className="text-base sm:text-lg font-semibold">Unit</h1>
+            <div className="w-16"></div> {/* Spacer */}
+          </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
+      <main className="container mx-auto px-4 py-4 sm:py-6 lg:py-8 max-w-4xl">
         {/* Unit Header */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="text-3xl">{unit.title}</CardTitle>
-            <CardDescription className="text-base mt-2">
+        <Card className="mb-4 sm:mb-6">
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="text-xl sm:text-2xl lg:text-3xl">{unit.title}</CardTitle>
+            <CardDescription className="text-sm sm:text-base mt-1 sm:mt-2">
               {unit.description}
             </CardDescription>
           </CardHeader>
@@ -181,13 +185,13 @@ export function UnitPage() {
         </Card>
 
         {/* Lessons List */}
-        <div className="space-y-4">
-          <h2 className="text-2xl font-bold">Lessons</h2>
+        <div className="space-y-3 sm:space-y-4">
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold">Lessons</h2>
 
           {lessons.length === 0 ? (
             <Card>
-              <CardContent className="py-12 text-center">
-                <p className="text-muted-foreground">No lessons available in this unit yet</p>
+              <CardContent className="py-8 sm:py-12 text-center">
+                <p className="text-sm text-muted-foreground">No lessons available in this unit yet</p>
               </CardContent>
             </Card>
           ) : (
@@ -202,35 +206,35 @@ export function UnitPage() {
                   className="cursor-pointer hover:shadow-md transition-shadow"
                   onClick={() => handleLessonClick(lesson)}
                 >
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-4">
+                  <CardContent className="p-3 sm:p-4 lg:p-6">
+                    <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
                       {/* Lesson Number */}
-                      <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center font-bold text-lg">
+                      <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary/10 flex items-center justify-center font-bold text-sm sm:text-base lg:text-lg">
                         {index + 1}
                       </div>
 
-                      {/* Lesson Type Icon */}
-                      <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-muted flex items-center justify-center">
-                        <LessonIcon className="w-6 h-6" />
+                      {/* Lesson Type Icon - hidden on mobile */}
+                      <div className="hidden sm:flex flex-shrink-0 w-12 h-12 rounded-lg bg-muted items-center justify-center">
+                        <LessonIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                       </div>
 
                       {/* Lesson Info */}
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-semibold truncate">{lesson.title}</h3>
-                          <Badge variant="outline" className="flex-shrink-0">
+                        <div className="flex items-start sm:items-center gap-2 mb-1 flex-wrap">
+                          <h3 className="text-sm sm:text-base font-semibold truncate flex-shrink min-w-0">{lesson.title}</h3>
+                          <Badge variant="outline" className="text-xs flex-shrink-0">
                             {lesson.type === 'video' && 'Video'}
                             {lesson.type === 'pdf' && 'PDF'}
-                            {lesson.type === 'live_class' && 'Live Class'}
+                            {lesson.type === 'live_class' && 'Live'}
                             {lesson.type === 'quiz' && 'Quiz'}
                           </Badge>
                         </div>
                         {lesson.description && (
-                          <p className="text-sm text-muted-foreground truncate">
+                          <p className="hidden sm:block text-sm text-muted-foreground truncate">
                             {lesson.description}
                           </p>
                         )}
-                        <div className="flex items-center gap-3 mt-2">
+                        <div className="flex items-center gap-2 sm:gap-3 mt-1 sm:mt-2 flex-wrap">
                           <Badge variant="secondary" className="text-xs">
                             +{lesson.xp_reward} XP
                           </Badge>
@@ -249,7 +253,7 @@ export function UnitPage() {
 
                       {/* Status Icon */}
                       <div className="flex-shrink-0">
-                        <StatusIcon className={`w-8 h-8 ${statusColor}`} />
+                        <StatusIcon className={`w-6 h-6 sm:w-8 sm:h-8 ${statusColor}`} />
                       </div>
                     </div>
                   </CardContent>

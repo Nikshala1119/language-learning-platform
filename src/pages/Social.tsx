@@ -210,51 +210,55 @@ export function Social() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b">
-        <div className="container mx-auto px-4 py-4">
-          <Link to="/dashboard">
-            <Button variant="ghost">← Back to Dashboard</Button>
-          </Link>
+      <header className="border-b sticky top-0 bg-background z-50">
+        <div className="container mx-auto px-4 py-3 sm:py-4">
+          <div className="flex items-center justify-between">
+            <Link to="/dashboard">
+              <Button variant="ghost" size="sm">← Back</Button>
+            </Link>
+            <h1 className="text-base sm:text-lg font-semibold">Social</h1>
+            <div className="w-16"></div> {/* Spacer */}
+          </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-6xl">
-        <h1 className="text-3xl font-bold mb-8">Social & Activity</h1>
+      <main className="container mx-auto px-4 py-4 sm:py-6 lg:py-8 max-w-6xl">
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 sm:mb-6">Activity & Friends</h2>
 
-        <div className="grid lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Left Sidebar - Friends */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className="lg:col-span-1 space-y-4 sm:space-y-6">
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="w-5 h-5" />
+              <CardHeader className="pb-3 sm:pb-6">
+                <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                  <Users className="w-4 h-4 sm:w-5 sm:h-5" />
                   Friends ({friends.length})
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 {friends.length === 0 ? (
-                  <p className="text-sm text-muted-foreground text-center py-4">
+                  <p className="text-xs sm:text-sm text-muted-foreground text-center py-3 sm:py-4">
                     No friends yet. Search and add friends!
                   </p>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3">
                     {friends.map((friend) => (
-                      <div key={friend.id} className="flex items-center gap-3">
-                        <Avatar className="w-10 h-10">
+                      <div key={friend.id} className="flex items-center gap-2 sm:gap-3">
+                        <Avatar className="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0">
                           <AvatarImage src={friend.friend_profile.avatar_url || undefined} />
                           <AvatarFallback>
                             {friend.friend_profile.full_name?.[0] || 'U'}
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium truncate">
+                          <p className="text-xs sm:text-sm font-medium truncate">
                             {friend.friend_profile.full_name || 'Anonymous'}
                           </p>
                           <p className="text-xs text-muted-foreground">
                             Level {friend.friend_profile.level}
                           </p>
                         </div>
-                        <Badge variant="secondary" className="text-xs">
+                        <Badge variant="secondary" className="text-xs flex-shrink-0">
                           {friend.friend_profile.xp} XP
                         </Badge>
                       </div>
@@ -266,25 +270,25 @@ export function Social() {
 
             {pendingRequests.length > 0 && (
               <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <UserPlus className="w-5 h-5" />
+                <CardHeader className="pb-3 sm:pb-6">
+                  <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                    <UserPlus className="w-4 h-4 sm:w-5 sm:h-5" />
                     Requests ({pendingRequests.length})
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3">
                     {pendingRequests.map((request) => (
                       <div key={request.id} className="space-y-2">
-                        <div className="flex items-center gap-3">
-                          <Avatar className="w-10 h-10">
+                        <div className="flex items-center gap-2 sm:gap-3">
+                          <Avatar className="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0">
                             <AvatarImage src={request.friend_profile.avatar_url || undefined} />
                             <AvatarFallback>
                               {request.friend_profile.full_name?.[0] || 'U'}
                             </AvatarFallback>
                           </Avatar>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium truncate">
+                            <p className="text-xs sm:text-sm font-medium truncate">
                               {request.friend_profile.full_name || 'Anonymous'}
                             </p>
                           </div>
@@ -292,7 +296,7 @@ export function Social() {
                         <div className="flex gap-2">
                           <Button
                             size="sm"
-                            className="flex-1"
+                            className="flex-1 text-xs sm:text-sm"
                             onClick={() => respondToRequest(request.id, true)}
                           >
                             Accept
@@ -300,7 +304,7 @@ export function Social() {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="flex-1"
+                            className="flex-1 text-xs sm:text-sm"
                             onClick={() => respondToRequest(request.id, false)}
                           >
                             Decline
@@ -315,21 +319,22 @@ export function Social() {
 
             {/* Search Users */}
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Search className="w-5 h-5" />
+              <CardHeader className="pb-3 sm:pb-6">
+                <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                  <Search className="w-4 h-4 sm:w-5 sm:h-5" />
                   Find Friends
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex gap-2">
+              <CardContent className="space-y-2 sm:space-y-3">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <Input
                     placeholder="Search by name or email..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                    className="text-sm"
                   />
-                  <Button onClick={handleSearch}>Search</Button>
+                  <Button onClick={handleSearch} size="sm" className="w-full sm:w-auto">Search</Button>
                 </div>
                 {searchResults.length > 0 && (
                   <div className="space-y-2">
@@ -360,34 +365,34 @@ export function Social() {
           {/* Main Content - Activity Feed */}
           <div className="lg:col-span-2">
             <Card>
-              <CardHeader>
-                <CardTitle>Activity Feed</CardTitle>
-                <CardDescription>
+              <CardHeader className="pb-3 sm:pb-6">
+                <CardTitle className="text-base sm:text-lg">Activity Feed</CardTitle>
+                <CardDescription className="text-xs sm:text-sm">
                   See what other learners are achieving
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 {activityFeed.length === 0 ? (
-                  <p className="text-center text-muted-foreground py-8">
+                  <p className="text-center text-sm text-muted-foreground py-6 sm:py-8">
                     No activity yet. Start learning to see updates!
                   </p>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="space-y-2 sm:space-y-3">
                     {activityFeed.map((activity) => {
                       const Icon = getActivityIcon(activity.activity_type)
                       return (
                         <div
                           key={activity.id}
-                          className="flex items-start gap-4 p-4 rounded-lg bg-muted/50"
+                          className="flex items-start gap-2 sm:gap-4 p-2 sm:p-4 rounded-lg bg-muted/50"
                         >
-                          <Avatar className="w-10 h-10">
+                          <Avatar className="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0">
                             <AvatarImage src={activity.user_profile.avatar_url || undefined} />
                             <AvatarFallback>
                               {activity.user_profile.full_name?.[0] || 'U'}
                             </AvatarFallback>
                           </Avatar>
-                          <div className="flex-1">
-                            <p className="text-sm">
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs sm:text-sm">
                               <span className="font-semibold">
                                 {activity.user_profile.full_name || 'Anonymous'}
                               </span>{' '}
@@ -401,7 +406,7 @@ export function Social() {
                               })}
                             </p>
                           </div>
-                          <Icon className="w-5 h-5 text-primary" />
+                          <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-primary flex-shrink-0" />
                         </div>
                       )
                     })}

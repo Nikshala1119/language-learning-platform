@@ -46,66 +46,69 @@ export function Leaderboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b">
-        <div className="container mx-auto px-4 py-4">
+      <header className="border-b sticky top-0 bg-background z-50">
+        <div className="container mx-auto px-4 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <Link to="/dashboard">
-              <Button variant="ghost">← Back to Dashboard</Button>
+              <Button variant="ghost" size="sm">← Back</Button>
             </Link>
+            <h1 className="text-base sm:text-lg font-semibold">🏆 Leaderboard</h1>
+            <div className="w-16"></div> {/* Spacer */}
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold">🏆 Leaderboard</h1>
+      <main className="container mx-auto px-4 py-4 sm:py-6 lg:py-8 max-w-4xl">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-3">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold">Top Learners</h2>
           <Button
             variant="outline"
             size="sm"
             onClick={handleRefresh}
             disabled={refreshing}
+            className="w-full sm:w-auto"
           >
             <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
         </div>
 
-        <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-          <p className="text-sm text-green-800">
+        <div className="mb-4 p-2 sm:p-3 bg-green-50 border border-green-200 rounded-lg">
+          <p className="text-xs sm:text-sm text-green-800">
             🔴 Live updates enabled - Rankings update automatically
           </p>
         </div>
 
         <Card>
-          <CardHeader>
-            <CardTitle>Top Learners</CardTitle>
+          <CardHeader className="pb-3 sm:pb-6">
+            <CardTitle className="text-base sm:text-lg">Rankings</CardTitle>
           </CardHeader>
           <CardContent>
             {leaderboard.length === 0 ? (
-              <p className="text-center text-muted-foreground py-8">
+              <p className="text-center text-sm text-muted-foreground py-6 sm:py-8">
                 No learners yet. Be the first to earn XP!
               </p>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-2 sm:space-y-3">
                 {leaderboard.map((entry) => (
                   <div
                     key={entry.user_id}
-                    className="flex items-center gap-4 p-4 rounded-lg hover:bg-muted/50 transition-colors"
+                    className="flex items-center gap-2 sm:gap-4 p-2 sm:p-4 rounded-lg hover:bg-muted/50 transition-colors"
                   >
                     {/* Rank */}
-                    <div className="flex items-center justify-center w-12 h-12">
-                      {entry.rank === 1 && <span className="text-3xl">🥇</span>}
-                      {entry.rank === 2 && <span className="text-3xl">🥈</span>}
-                      {entry.rank === 3 && <span className="text-3xl">🥉</span>}
+                    <div className="flex items-center justify-center w-8 sm:w-12 h-8 sm:h-12 flex-shrink-0">
+                      {entry.rank === 1 && <span className="text-2xl sm:text-3xl">🥇</span>}
+                      {entry.rank === 2 && <span className="text-2xl sm:text-3xl">🥈</span>}
+                      {entry.rank === 3 && <span className="text-2xl sm:text-3xl">🥉</span>}
                       {entry.rank > 3 && (
-                        <span className="text-xl font-bold text-muted-foreground">
+                        <span className="text-base sm:text-xl font-bold text-muted-foreground">
                           #{entry.rank}
                         </span>
                       )}
                     </div>
 
                     {/* Avatar */}
-                    <Avatar className="h-12 w-12">
+                    <Avatar className="h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0">
                       <AvatarImage src={entry.avatar_url || undefined} />
                       <AvatarFallback>
                         {entry.full_name?.[0] || 'U'}
@@ -114,16 +117,16 @@ export function Leaderboard() {
 
                     {/* Name & Level */}
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold truncate">
+                      <p className="text-sm sm:text-base font-semibold truncate">
                         {entry.full_name || 'Anonymous'}
                       </p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-xs sm:text-sm text-muted-foreground">
                         Level {entry.level}
                       </p>
                     </div>
 
                     {/* XP */}
-                    <Badge variant="secondary" className="text-base px-4 py-2">
+                    <Badge variant="secondary" className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5 flex-shrink-0">
                       {entry.xp} XP
                     </Badge>
                   </div>

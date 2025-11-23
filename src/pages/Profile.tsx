@@ -21,18 +21,20 @@ export function Profile() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b">
-        <div className="container mx-auto px-4 py-4">
+      <header className="border-b sticky top-0 bg-background z-50">
+        <div className="container mx-auto px-4 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <Link to="/dashboard">
-              <Button variant="ghost">← Back to Dashboard</Button>
+              <Button variant="ghost" size="sm">← Back</Button>
             </Link>
+            <h1 className="text-base sm:text-lg font-semibold">My Profile</h1>
+            <div className="w-16"></div> {/* Spacer for centering */}
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
-        <div className="grid md:grid-cols-3 gap-6">
+      <main className="container mx-auto px-4 py-4 sm:py-6 lg:py-8 max-w-4xl">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           {/* Profile Card */}
           <Card className="md:col-span-1">
             <CardHeader className="text-center">
@@ -61,12 +63,12 @@ export function Profile() {
           </Card>
 
           {/* Stats */}
-          <div className="md:col-span-2 space-y-6">
+          <div className="md:col-span-2 space-y-4 sm:space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Progress Stats</CardTitle>
+                <CardTitle className="text-lg sm:text-xl">Progress Stats</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-4 sm:space-y-6">
                 <div>
                   <div className="flex justify-between mb-2">
                     <span className="text-sm font-medium">Level {profile.level}</span>
@@ -80,14 +82,14 @@ export function Profile() {
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4">
                   <div>
-                    <p className="text-sm text-muted-foreground">Current Streak</p>
-                    <p className="text-2xl font-bold">🔥 {profile.streak_count} days</p>
+                    <p className="text-xs sm:text-sm text-muted-foreground">Current Streak</p>
+                    <p className="text-xl sm:text-2xl font-bold">🔥 {profile.streak_count} days</p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Streak Freezes</p>
-                    <p className="text-2xl font-bold">❄️ {profile.streak_freeze_count}</p>
+                    <p className="text-xs sm:text-sm text-muted-foreground">Streak Freezes</p>
+                    <p className="text-xl sm:text-2xl font-bold">❄️ {profile.streak_freeze_count}</p>
                   </div>
                 </div>
 
@@ -108,13 +110,13 @@ export function Profile() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Achievements</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-lg sm:text-xl">Achievements</CardTitle>
+                <CardDescription className="text-xs sm:text-sm">
                   Complete lessons and challenges to earn badges!
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-center text-muted-foreground py-8">
+                <p className="text-center text-sm text-muted-foreground py-6 sm:py-8">
                   No achievements yet. Start learning to unlock them!
                 </p>
               </CardContent>

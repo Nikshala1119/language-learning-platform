@@ -38,6 +38,7 @@ export function QuizPage() {
 
   // For match_pairs
   const [selectedPairs, setSelectedPairs] = useState<{left: string, right: string}[]>([])
+  const [shuffledRightSide, setShuffledRightSide] = useState<string[]>([])
   // For word_order
   const [orderedWords, setOrderedWords] = useState<string[]>([])
   // For speak_record (placeholder)
@@ -82,6 +83,19 @@ export function QuizPage() {
 
   const currentQuestion = questions[currentQuestionIndex]
 
+  // Initialize match_pairs when question changes
+  useEffect(() => {
+    if (currentQuestion?.type === 'match_pairs' && currentQuestion.options) {
+      const pairs = currentQuestion.options as {left: string, right: string}[]
+      // Shuffle the right side for matching
+      const rightSide = pairs.map(p => p.right)
+      const shuffled = [...rightSide].sort(() => Math.random() - 0.5)
+      setShuffledRightSide(shuffled)
+      // Initialize selected pairs with left side and empty right side
+      setSelectedPairs(pairs.map(p => ({ left: p.left, right: '' })))
+    }
+  }, [currentQuestionIndex, currentQuestion])
+
   const checkAnswer = () => {
     if (!currentQuestion) return
 
@@ -97,11 +111,17 @@ export function QuizPage() {
         break
 
       case 'match_pairs':
-        const correctPairs = currentQuestion.correct_answer as any[]
+        const correctPairs = currentQuestion.correct_answer as {left: string, right: string}[]
+        // Check if all pairs are matched and every pair has the correct right side
         correct = selectedPairs.length === correctPairs.length &&
-          selectedPairs.every((pair, idx) =>
-            pair.left === correctPairs[idx].left && pair.right === correctPairs[idx].right
-          )
+          selectedPairs.every(selectedPair => {
+            // Check if this pair has been filled
+            if (!selectedPair.right) return false
+            // Find the correct pair for this left side
+            const correctPair = correctPairs.find(cp => cp.left === selectedPair.left)
+            // Check if the right side matches
+            return correctPair && selectedPair.right === correctPair.right
+          })
         break
 
       case 'word_order':
@@ -163,6 +183,7 @@ export function QuizPage() {
   const resetQuestionState = () => {
     setCurrentAnswer(null)
     setSelectedPairs([])
+    setShuffledRightSide([])
     setOrderedWords([])
     setIsCorrect(false)
   }
@@ -363,20 +384,33 @@ export function QuizPage() {
 
             {/* Match Pairs */}
             {currentQuestion.type === 'match_pairs' && (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <p className="text-sm text-muted-foreground mb-2">
                   Match the items from left to right:
                 </p>
-                {(currentQuestion.options as {left: string, right: string}[]).map((pair, idx) => (
+                {selectedPairs.map((pair, idx) => (
                   <div key={idx} className="flex gap-2 items-center">
-                    <Input value={pair.left} readOnly className="flex-1" />
-                    <span>↔</span>
-                    <Input value={pair.right} readOnly className="flex-1" />
+                    <Input value={pair.left} readOnly className="flex-1 bg-muted" />
+                    <span className="text-muted-foreground">↔</span>
+                    <select
+                      value={pair.right}
+                      onChange={(e) => {
+                        const newPairs = [...selectedPairs]
+                        newPairs[idx].right = e.target.value
+                        setSelectedPairs(newPairs)
+                      }}
+                      className="flex h-10 w-full flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      disabled={showResult}
+                    >
+                      <option value="">-- Select match --</option>
+                      {shuffledRightSide.map((rightValue, rightIdx) => (
+                        <option key={rightIdx} value={rightValue}>
+                          {rightValue}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 ))}
-                <p className="text-xs text-muted-foreground mt-2">
-                  Note: Drag & drop would be implemented for better UX
-                </p>
               </div>
             )}
 
@@ -476,7 +510,7 @@ export function QuizPage() {
                   onClick={checkAnswer}
                   disabled={
                     (currentQuestion.type === 'word_order' && orderedWords.length === 0) ||
-                    (currentQuestion.type === 'match_pairs' && selectedPairs.length === 0) ||
+                    (currentQuestion.type === 'match_pairs' && selectedPairs.some(p => !p.right)) ||
                     (!['word_order', 'match_pairs'].includes(currentQuestion.type) && !currentAnswer)
                   }
                 >

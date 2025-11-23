@@ -1,6 +1,8 @@
+import { useState, useEffect } from 'react'
 import { Link, Routes, Route } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { supabase } from '@/lib/supabase'
 import { CoursesAdmin } from './CoursesAdmin'
 import { UnitsAdmin } from './UnitsAdmin'
 import { LessonsAdmin } from './LessonsAdmin'
@@ -101,6 +103,51 @@ export function AdminPanel() {
 }
 
 function AdminOverview() {
+  const [loading, setLoading] = useState(true)
+  const [stats, setStats] = useState({
+    totalCourses: 0,
+    activeStudents: 0,
+    totalLessons: 0,
+    totalCompletions: 0,
+  })
+
+  useEffect(() => {
+    fetchStats()
+  }, [])
+
+  const fetchStats = async () => {
+    try {
+      setLoading(true)
+
+      // Fetch all stats in parallel
+      const [coursesRes, studentsRes, lessonsRes, progressRes] = await Promise.all([
+        supabase.from('courses').select('id', { count: 'exact', head: true }),
+        supabase.from('profiles').select('id', { count: 'exact', head: true }).eq('role', 'student').eq('login_enabled', true),
+        supabase.from('lessons').select('id', { count: 'exact', head: true }),
+        supabase.from('progress').select('id', { count: 'exact', head: true }).eq('status', 'completed'),
+      ])
+
+      setStats({
+        totalCourses: coursesRes.count || 0,
+        activeStudents: studentsRes.count || 0,
+        totalLessons: lessonsRes.count || 0,
+        totalCompletions: progressRes.count || 0,
+      })
+    } catch (error) {
+      console.error('Error fetching stats:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-xl">Loading dashboard...</div>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -113,25 +160,25 @@ function AdminOverview() {
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold mb-1">0</div>
+            <div className="text-2xl font-bold mb-1">{stats.totalCourses}</div>
             <p className="text-sm text-muted-foreground">Total Courses</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold mb-1">0</div>
+            <div className="text-2xl font-bold mb-1">{stats.activeStudents}</div>
             <p className="text-sm text-muted-foreground">Active Students</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold mb-1">0</div>
+            <div className="text-2xl font-bold mb-1">{stats.totalLessons}</div>
             <p className="text-sm text-muted-foreground">Lessons</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold mb-1">0</div>
+            <div className="text-2xl font-bold mb-1">{stats.totalCompletions}</div>
             <p className="text-sm text-muted-foreground">Completions</p>
           </CardContent>
         </Card>
@@ -160,51 +207,4 @@ function AdminOverview() {
   )
 }
 
-function AdminCoursesPlaceholder() {
-  return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Manage Courses</h1>
-      <Card>
-        <CardContent className="py-12 text-center">
-          <p className="text-muted-foreground">
-            Course management interface coming soon
-          </p>
-          <p className="text-sm text-muted-foreground mt-2">
-            See IMPLEMENTATION_GUIDE.md for details
-          </p>
-        </CardContent>
-      </Card>
-    </div>
-  )
-}
-
-function AdminLessonsPlaceholder() {
-  return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Manage Lessons</h1>
-      <Card>
-        <CardContent className="py-12 text-center">
-          <p className="text-muted-foreground">
-            Lesson management interface coming soon
-          </p>
-        </CardContent>
-      </Card>
-    </div>
-  )
-}
-
-function AdminStudentsPlaceholder() {
-  return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Manage Students</h1>
-      <Card>
-        <CardContent className="py-12 text-center">
-          <p className="text-muted-foreground">
-            Student management interface coming soon
-          </p>
-        </CardContent>
-      </Card>
-    </div>
-  )
-}
 

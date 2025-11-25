@@ -93,7 +93,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       }
 
       if (data.session) {
-        set({ session: data.session, user: data.user })
+        set({ session: data.session, user: data.user, initialized: true })
         await get().fetchProfile()
       }
 

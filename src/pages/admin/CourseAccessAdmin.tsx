@@ -165,7 +165,7 @@ export function CourseAccessAdmin() {
     <div className="p-8">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold">Course Access Management</h1>
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold">Course Access Management</h1>
           <p className="text-muted-foreground mt-1">Control which students can access which courses</p>
         </div>
         <Button onClick={() => setShowGrantModal(true)}>

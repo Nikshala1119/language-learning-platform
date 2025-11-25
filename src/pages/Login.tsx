@@ -39,23 +39,23 @@ export function Login() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10">
-      <Card className="w-full max-w-md mx-4">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Welcome Back</CardTitle>
-          <CardDescription className="text-center">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="space-y-1 p-4 sm:p-6">
+          <CardTitle className="text-xl sm:text-2xl font-bold text-center">Welcome Back</CardTitle>
+          <CardDescription className="text-center text-sm sm:text-base">
             Enter your credentials to access your account
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 p-4 sm:p-6">
             {error && (
-              <div className="p-3 text-sm text-destructive bg-destructive/10 rounded-md">
+              <div className="p-2 sm:p-3 text-xs sm:text-sm text-destructive bg-destructive/10 rounded-md">
                 {error}
               </div>
             )}
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-sm">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -67,7 +67,7 @@ export function Login() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-sm">Password</Label>
               <Input
                 id="password"
                 type="password"
@@ -76,14 +76,15 @@ export function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={loading}
+                className="text-sm sm:text-base"
               />
             </div>
           </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full" disabled={loading}>
+          <CardFooter className="flex flex-col space-y-4 p-4 sm:p-6">
+            <Button type="submit" className="w-full text-sm sm:text-base" disabled={loading}>
               {loading ? 'Signing in...' : 'Sign In'}
             </Button>
-            <p className="text-sm text-center text-muted-foreground">
+            <p className="text-xs sm:text-sm text-center text-muted-foreground">
               Don't have an account?{' '}
               <Link to="/signup" className="text-primary hover:underline">
                 Sign up

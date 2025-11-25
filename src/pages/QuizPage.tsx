@@ -41,6 +41,7 @@ export function QuizPage() {
   const [shuffledRightSide, setShuffledRightSide] = useState<string[]>([])
   // For word_order
   const [orderedWords, setOrderedWords] = useState<string[]>([])
+  const [shuffledWords, setShuffledWords] = useState<string[]>([])
   // For speak_record (placeholder)
   const [isRecording, setIsRecording] = useState(false)
 
@@ -83,7 +84,7 @@ export function QuizPage() {
 
   const currentQuestion = questions[currentQuestionIndex]
 
-  // Initialize match_pairs when question changes
+  // Initialize match_pairs and word_order when question changes
   useEffect(() => {
     if (currentQuestion?.type === 'match_pairs' && currentQuestion.options) {
       const pairs = currentQuestion.options as {left: string, right: string}[]
@@ -93,6 +94,13 @@ export function QuizPage() {
       setShuffledRightSide(shuffled)
       // Initialize selected pairs with left side and empty right side
       setSelectedPairs(pairs.map(p => ({ left: p.left, right: '' })))
+    }
+
+    if (currentQuestion?.type === 'word_order' && currentQuestion.options) {
+      const words = currentQuestion.options as string[]
+      // Shuffle the words for the question
+      const shuffled = [...words].sort(() => Math.random() - 0.5)
+      setShuffledWords(shuffled)
     }
   }, [currentQuestionIndex, currentQuestion])
 
@@ -185,6 +193,7 @@ export function QuizPage() {
     setSelectedPairs([])
     setShuffledRightSide([])
     setOrderedWords([])
+    setShuffledWords([])
     setIsCorrect(false)
   }
 
@@ -421,7 +430,7 @@ export function QuizPage() {
                   Arrange the words in the correct order:
                 </p>
                 <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                  {(currentQuestion.options as string[]).map((word, idx) => (
+                  {shuffledWords.map((word, idx) => (
                     <Button
                       key={idx}
                       variant="outline"

@@ -164,11 +164,11 @@ export function LessonPage() {
 
   if (!lesson) {
     return (
-      <div className="min-h-screen bg-background p-8">
+      <div className="min-h-screen bg-background p-4 sm:p-6 lg:p-8">
         <Card>
-          <CardContent className="py-12 text-center">
-            <p className="text-muted-foreground">Lesson not found</p>
-            <Button onClick={() => navigate('/dashboard')} className="mt-4">
+          <CardContent className="py-8 sm:py-12 text-center">
+            <p className="text-sm text-muted-foreground">Lesson not found</p>
+            <Button onClick={() => navigate('/dashboard')} className="mt-4 text-sm">
               Back to Dashboard
             </Button>
           </CardContent>
@@ -181,46 +181,46 @@ export function LessonPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b">
-        <div className="container mx-auto px-4 py-4">
+      <header className="border-b sticky top-0 bg-background z-50">
+        <div className="container mx-auto px-4 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <Link to="/dashboard">
-              <Button variant="ghost">← Back to Dashboard</Button>
+              <Button variant="ghost" size="sm">← Back</Button>
             </Link>
             {progress?.status === 'completed' && (
-              <Badge variant="default" className="flex items-center gap-1">
-                <CheckCircle className="w-4 h-4" />
-                Completed
+              <Badge variant="default" className="flex items-center gap-1 text-xs">
+                <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">Completed</span>
               </Badge>
             )}
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
+      <main className="container mx-auto px-4 py-4 sm:py-6 lg:py-8 max-w-4xl">
         {/* Lesson Header */}
-        <Card className="mb-6">
-          <CardHeader>
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                <Icon className="w-6 h-6" />
+        <Card className="mb-4 sm:mb-6">
+          <CardHeader className="p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <CardTitle className="text-2xl">{lesson.title}</CardTitle>
-                  <Badge variant="outline">
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+                  <CardTitle className="text-lg sm:text-xl lg:text-2xl">{lesson.title}</CardTitle>
+                  <Badge variant="outline" className="text-xs w-fit">
                     {lesson.type === 'video' && 'Video Lesson'}
                     {lesson.type === 'pdf' && 'PDF Document'}
                     {lesson.type === 'live_class' && 'Live Class'}
                     {lesson.type === 'quiz' && 'Quiz'}
                   </Badge>
                 </div>
-                <CardDescription>{lesson.description}</CardDescription>
-                <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                <CardDescription className="text-sm">{lesson.description}</CardDescription>
+                <div className="flex items-center gap-3 sm:gap-4 mt-2 text-xs sm:text-sm text-muted-foreground flex-wrap">
                   <span>+{lesson.xp_reward} XP</span>
                   {lesson.duration_minutes && (
                     <span className="flex items-center gap-1">
-                      <Clock className="w-4 h-4" />
+                      <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
                       {lesson.duration_minutes} min
                     </span>
                   )}
@@ -231,11 +231,11 @@ export function LessonPage() {
         </Card>
 
         {/* Lesson Content */}
-        <Card className="mb-6">
-          <CardContent className="p-6">
+        <Card className="mb-4 sm:mb-6">
+          <CardContent className="p-4 sm:p-6">
             {/* Video Lesson */}
             {lesson.type === 'video' && lesson.content_url && (
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 <div className="aspect-video bg-black rounded-lg overflow-hidden">
                   <iframe
                     src={lesson.content_url}
@@ -244,7 +244,7 @@ export function LessonPage() {
                     title={lesson.title}
                   />
                 </div>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   Watch the entire video to complete this lesson
                 </p>
               </div>
@@ -252,7 +252,7 @@ export function LessonPage() {
 
             {/* PDF Lesson */}
             {lesson.type === 'pdf' && lesson.content_url && (
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 <div className="aspect-[3/4] bg-muted rounded-lg overflow-hidden">
                   <iframe
                     src={lesson.content_url}
@@ -260,13 +260,13 @@ export function LessonPage() {
                     title={lesson.title}
                   />
                 </div>
-                <div className="flex gap-2">
-                  <Button asChild>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <Button asChild size="sm" className="w-full sm:w-auto text-xs sm:text-sm">
                     <a href={lesson.content_url} target="_blank" rel="noopener noreferrer">
                       Open in New Tab
                     </a>
                   </Button>
-                  <Button variant="outline" asChild>
+                  <Button variant="outline" asChild size="sm" className="w-full sm:w-auto text-xs sm:text-sm">
                     <a href={lesson.content_url} download>
                       Download PDF
                     </a>
@@ -277,29 +277,29 @@ export function LessonPage() {
 
             {/* Live Class */}
             {lesson.type === 'live_class' && (
-              <div className="space-y-4">
-                <div className="bg-primary/10 rounded-lg p-8 text-center">
-                  <Users className="w-16 h-16 mx-auto mb-4 text-primary" />
-                  <h3 className="text-xl font-semibold mb-2">Live Class Session</h3>
+              <div className="space-y-3 sm:space-y-4">
+                <div className="bg-primary/10 rounded-lg p-6 sm:p-8 text-center">
+                  <Users className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-primary" />
+                  <h3 className="text-lg sm:text-xl font-semibold mb-2">Live Class Session</h3>
                   {lesson.scheduled_at && (
-                    <p className="text-sm text-muted-foreground mb-4">
+                    <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">
                       Scheduled: {new Date(lesson.scheduled_at).toLocaleString()}
                     </p>
                   )}
                   {lesson.duration_minutes && (
-                    <p className="text-sm text-muted-foreground mb-4">
+                    <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">
                       Duration: {lesson.duration_minutes} minutes
                     </p>
                   )}
                   {lesson.meet_link && (
-                    <Button size="lg" asChild>
+                    <Button size="sm" asChild className="sm:size-default">
                       <a href={lesson.meet_link} target="_blank" rel="noopener noreferrer">
                         Join Live Class
                       </a>
                     </Button>
                   )}
                 </div>
-                <p className="text-sm text-muted-foreground text-center">
+                <p className="text-xs sm:text-sm text-muted-foreground text-center">
                   Attend the live class and mark it complete when done
                 </p>
               </div>
@@ -307,14 +307,14 @@ export function LessonPage() {
 
             {/* Quiz - Show button to start quiz */}
             {lesson.type === 'quiz' && (
-              <div className="space-y-4">
-                <div className="bg-primary/10 rounded-lg p-8 text-center">
-                  <ClipboardList className="w-16 h-16 mx-auto mb-4 text-primary" />
-                  <h3 className="text-xl font-semibold mb-2">Quiz Time!</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
+              <div className="space-y-3 sm:space-y-4">
+                <div className="bg-primary/10 rounded-lg p-6 sm:p-8 text-center">
+                  <ClipboardList className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-primary" />
+                  <h3 className="text-lg sm:text-xl font-semibold mb-2">Quiz Time!</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">
                     Test your knowledge with interactive questions
                   </p>
-                  <Button size="lg" onClick={() => navigate(`/quiz/${lessonId}`)}>
+                  <Button size="sm" onClick={() => navigate(`/quiz/${lessonId}`)} className="sm:size-default">
                     Start Quiz
                   </Button>
                 </div>
@@ -326,18 +326,19 @@ export function LessonPage() {
         {/* Complete Lesson Button */}
         {lesson.type !== 'quiz' && progress?.status !== 'completed' && (
           <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium mb-1">Ready to complete this lesson?</p>
-                  <p className="text-sm text-muted-foreground">
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+                <div className="flex-1">
+                  <p className="text-sm sm:text-base font-medium mb-1">Ready to complete this lesson?</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">
                     You'll earn {lesson.xp_reward} XP for completing this lesson
                   </p>
                 </div>
                 <Button
-                  size="lg"
+                  size="sm"
                   onClick={handleCompleteLesson}
                   disabled={completing}
+                  className="w-full sm:w-auto text-xs sm:text-sm whitespace-nowrap"
                 >
                   {completing ? 'Completing...' : 'Mark as Complete'}
                 </Button>
@@ -348,13 +349,13 @@ export function LessonPage() {
 
         {progress?.status === 'completed' && (
           <Card className="bg-primary/5 border-primary/20">
-            <CardContent className="p-6 text-center">
-              <CheckCircle className="w-12 h-12 mx-auto mb-2 text-primary" />
-              <p className="font-medium text-lg mb-1">Lesson Completed!</p>
-              <p className="text-sm text-muted-foreground">
+            <CardContent className="p-4 sm:p-6 text-center">
+              <CheckCircle className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 text-primary" />
+              <p className="text-base sm:text-lg font-medium mb-1">Lesson Completed!</p>
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 Great job! You earned {lesson.xp_reward} XP
               </p>
-              <Button onClick={() => navigate('/dashboard')} className="mt-4">
+              <Button onClick={() => navigate('/dashboard')} className="mt-4 text-xs sm:text-sm">
                 Back to Dashboard
               </Button>
             </CardContent>

@@ -46,13 +46,13 @@ export function SignUp() {
 
   if (success) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10">
-        <Card className="w-full max-w-md mx-4">
-          <CardContent className="pt-6">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
+        <Card className="w-full max-w-md">
+          <CardContent className="pt-6 p-4 sm:p-6">
             <div className="text-center space-y-2">
-              <div className="text-4xl">✓</div>
-              <h3 className="text-xl font-semibold">Account created successfully!</h3>
-              <p className="text-muted-foreground">
+              <div className="text-3xl sm:text-4xl">✓</div>
+              <h3 className="text-lg sm:text-xl font-semibold">Account created successfully!</h3>
+              <p className="text-sm sm:text-base text-muted-foreground">
                 Check your email for confirmation. Redirecting to login...
               </p>
             </div>
@@ -63,23 +63,23 @@ export function SignUp() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10">
-      <Card className="w-full max-w-md mx-4">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Create an Account</CardTitle>
-          <CardDescription className="text-center">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="space-y-1 p-4 sm:p-6">
+          <CardTitle className="text-xl sm:text-2xl font-bold text-center">Create an Account</CardTitle>
+          <CardDescription className="text-center text-sm sm:text-base">
             Start your language learning journey today
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 p-4 sm:p-6">
             {error && (
-              <div className="p-3 text-sm text-destructive bg-destructive/10 rounded-md">
+              <div className="p-2 sm:p-3 text-xs sm:text-sm text-destructive bg-destructive/10 rounded-md">
                 {error}
               </div>
             )}
             <div className="space-y-2">
-              <Label htmlFor="fullName">Full Name</Label>
+              <Label htmlFor="fullName" className="text-sm">Full Name</Label>
               <Input
                 id="fullName"
                 type="text"
@@ -91,7 +91,7 @@ export function SignUp() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-sm">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -100,10 +100,11 @@ export function SignUp() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={loading}
+                className="text-sm sm:text-base"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-sm">Password</Label>
               <Input
                 id="password"
                 type="password"
@@ -113,17 +114,18 @@ export function SignUp() {
                 required
                 disabled={loading}
                 minLength={6}
+                className="text-sm sm:text-base"
               />
               <p className="text-xs text-muted-foreground">
                 Must be at least 6 characters
               </p>
             </div>
           </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full" disabled={loading}>
+          <CardFooter className="flex flex-col space-y-4 p-4 sm:p-6">
+            <Button type="submit" className="w-full text-sm sm:text-base" disabled={loading}>
               {loading ? 'Creating account...' : 'Sign Up'}
             </Button>
-            <p className="text-sm text-center text-muted-foreground">
+            <p className="text-xs sm:text-sm text-center text-muted-foreground">
               Already have an account?{' '}
               <Link to="/login" className="text-primary hover:underline">
                 Sign in

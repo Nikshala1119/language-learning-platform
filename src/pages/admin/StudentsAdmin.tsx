@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import type { Database } from '@/lib/database.types'
 import { Button } from '@/components/ui/button'
@@ -7,7 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Search, UserCog, Clock, UserCheck, UserX } from 'lucide-react'
+import { Search, UserCog, Clock, UserCheck, UserX, BarChart3 } from 'lucide-react'
 
 type Profile = Database['public']['Tables']['profiles']['Row']
 
@@ -290,7 +291,17 @@ export function StudentsAdmin() {
                     </div>
                   </div>
 
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      variant="default"
+                      size="sm"
+                      asChild
+                    >
+                      <Link to={`/admin/students/${student.id}/progress`}>
+                        <BarChart3 className="w-4 h-4 mr-2" />
+                        View Progress
+                      </Link>
+                    </Button>
                     <Button
                       variant={student.login_enabled ? "outline" : "default"}
                       size="sm"

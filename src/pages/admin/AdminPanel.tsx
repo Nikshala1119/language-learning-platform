@@ -9,6 +9,7 @@ import { UnitsAdmin } from './UnitsAdmin'
 import { LessonsAdmin } from './LessonsAdmin'
 import { QuestionsAdmin } from './QuestionsAdmin'
 import { StudentsAdmin } from './StudentsAdmin'
+import { StudentProgressAdmin } from './StudentProgressAdmin'
 import { MediaLibrary } from './MediaLibrary'
 import { AnalyticsDashboard } from './AnalyticsDashboard'
 import { CourseAccessAdmin } from './CourseAccessAdmin'
@@ -133,6 +134,7 @@ export function AdminPanel() {
           <Route path="lessons" element={<LessonsAdmin />} />
           <Route path="questions" element={<QuestionsAdmin />} />
           <Route path="students" element={<StudentsAdmin />} />
+          <Route path="students/:studentId/progress" element={<StudentProgressAdmin />} />
           <Route path="course-access" element={<CourseAccessAdmin />} />
           <Route path="analytics" element={<AnalyticsDashboard />} />
           <Route path="media" element={<MediaLibrary />} />

@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import { Pencil, Trash2, Plus, X } from 'lucide-react'
+import { Pencil, Trash2, Plus, X, Eye, Volume2, CheckCircle2 } from 'lucide-react'
 
 type Lesson = Database['public']['Tables']['lessons']['Row']
 type Question = Database['public']['Tables']['questions']['Row']
@@ -699,6 +699,205 @@ export function QuestionsAdmin() {
                   className="flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                   rows={2}
                 />
+              </div>
+
+              {/* Live Preview Section */}
+              <div className="border-t pt-6 mt-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <Eye className="w-5 h-5 text-primary" />
+                  <h3 className="font-semibold text-lg">Question Preview</h3>
+                </div>
+                <Card className="bg-gradient-to-br from-primary/5 to-purple-500/5 border-primary/20">
+                  <CardContent className="pt-6">
+                    {/* Question Text */}
+                    {formData.type === 'listen_type' ? (
+                      <div className="flex items-center gap-3 mb-6">
+                        <Button variant="outline" size="icon" className="h-12 w-12 rounded-full">
+                          <Volume2 className="w-6 h-6" />
+                        </Button>
+                        <span className="text-muted-foreground">Listen and type what you hear</span>
+                      </div>
+                    ) : (
+                      <p className="text-lg font-medium mb-6">
+                        {formData.question_text || <span className="text-muted-foreground italic">Question text will appear here...</span>}
+                      </p>
+                    )}
+
+                    {/* Multiple Choice Preview */}
+                    {formData.type === 'multiple_choice' && (
+                      <div className="space-y-3">
+                        {formData.options.filter((o: string) => o.trim()).length > 0 ? (
+                          formData.options.filter((o: string) => o.trim()).map((option: string, index: number) => (
+                            <div
+                              key={index}
+                              className={`p-4 rounded-lg border-2 transition-all ${
+                                option === formData.correct_answer
+                                  ? 'border-green-500 bg-green-50 dark:bg-green-950/30'
+                                  : 'border-border hover:border-primary/50'
+                              }`}
+                            >
+                              <div className="flex items-center justify-between">
+                                <span>{option}</span>
+                                {option === formData.correct_answer && (
+                                  <CheckCircle2 className="w-5 h-5 text-green-500" />
+                                )}
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-muted-foreground italic text-center py-4">Add options to see preview...</p>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Fill in the Blank Preview */}
+                    {formData.type === 'fill_blank' && (
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span>Answer:</span>
+                          <div className="inline-flex items-center px-4 py-2 rounded-lg border-2 border-dashed border-primary/50 bg-primary/5 min-w-[120px]">
+                            <span className="text-primary font-medium">
+                              {formData.correct_answer || '______'}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Translation Preview */}
+                    {formData.type === 'translation' && (
+                      <div className="space-y-4">
+                        <div className="p-4 rounded-lg bg-muted/50">
+                          <p className="text-sm text-muted-foreground mb-1">Translate to:</p>
+                          <p className="font-medium text-green-600 dark:text-green-400">
+                            {formData.correct_answer || <span className="text-muted-foreground italic">Correct translation...</span>}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Listen & Type Preview */}
+                    {formData.type === 'listen_type' && (
+                      <div className="space-y-4">
+                        {formData.question_audio_url && (
+                          <audio controls className="w-full">
+                            <source src={formData.question_audio_url} />
+                          </audio>
+                        )}
+                        <div className="p-4 rounded-lg border-2 border-dashed border-muted-foreground/30">
+                          <p className="text-muted-foreground text-center">Type your answer here...</p>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          Expected: <span className="font-medium text-foreground">{formData.correct_answer || '...'}</span>
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Speak & Record Preview */}
+                    {formData.type === 'speak_record' && (
+                      <div className="space-y-4">
+                        <div className="flex flex-col items-center gap-4 p-6 rounded-lg bg-muted/50">
+                          <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
+                            <Volume2 className="w-8 h-8 text-primary" />
+                          </div>
+                          <p className="text-muted-foreground">Tap to record your voice</p>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          Say: <span className="font-medium text-foreground">{formData.correct_answer || '...'}</span>
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Match Pairs Preview */}
+                    {formData.type === 'match_pairs' && (
+                      <div className="space-y-4">
+                        {formData.pairs.filter((p: any) => p.left || p.right).length > 0 ? (
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              {formData.pairs.filter((p: any) => p.left).map((pair: any, index: number) => (
+                                <div key={index} className="p-3 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-center font-medium">
+                                  {pair.left}
+                                </div>
+                              ))}
+                            </div>
+                            <div className="space-y-2">
+                              {formData.pairs.filter((p: any) => p.right).map((pair: any, index: number) => (
+                                <div key={index} className="p-3 rounded-lg bg-purple-100 dark:bg-purple-900/30 text-center font-medium">
+                                  {pair.right}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : (
+                          <p className="text-muted-foreground italic text-center py-4">Add pairs to see preview...</p>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Word Order Preview */}
+                    {formData.type === 'word_order' && (
+                      <div className="space-y-4">
+                        {formData.words.filter((w: string) => w.trim()).length > 0 ? (
+                          <>
+                            <p className="text-sm text-muted-foreground mb-2">Arrange the words in correct order:</p>
+                            <div className="flex flex-wrap gap-2">
+                              {[...formData.words.filter((w: string) => w.trim())].sort(() => Math.random() - 0.5).map((word: string, index: number) => (
+                                <div key={index} className="px-4 py-2 rounded-lg bg-muted font-medium cursor-pointer hover:bg-primary/20 transition-colors">
+                                  {word}
+                                </div>
+                              ))}
+                            </div>
+                            <div className="p-4 rounded-lg border-2 border-dashed border-muted-foreground/30 min-h-[50px]">
+                              <p className="text-muted-foreground text-center text-sm">Drop words here...</p>
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                              Correct order: {formData.words.filter((w: string) => w.trim()).join(' → ')}
+                            </p>
+                          </>
+                        ) : (
+                          <p className="text-muted-foreground italic text-center py-4">Add words to see preview...</p>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Image Select Preview */}
+                    {formData.type === 'image_select' && (
+                      <div className="space-y-4">
+                        {formData.images.filter((i: string) => i.trim()).length > 0 ? (
+                          <div className="grid grid-cols-2 gap-4">
+                            {formData.images.filter((i: string) => i.trim()).map((image: string, index: number) => (
+                              <div
+                                key={index}
+                                className={`relative aspect-square rounded-lg overflow-hidden border-4 transition-all ${
+                                  image === formData.correct_answer
+                                    ? 'border-green-500'
+                                    : 'border-transparent hover:border-primary/50'
+                                }`}
+                              >
+                                <img src={image} alt={`Option ${index + 1}`} className="w-full h-full object-cover" />
+                                {image === formData.correct_answer && (
+                                  <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
+                                    <CheckCircle2 className="w-4 h-4 text-white" />
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-muted-foreground italic text-center py-4">Add image URLs to see preview...</p>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Explanation Preview */}
+                    {formData.explanation && (
+                      <div className="mt-6 p-4 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800">
+                        <p className="text-sm font-medium text-blue-800 dark:text-blue-300 mb-1">Explanation:</p>
+                        <p className="text-sm text-blue-700 dark:text-blue-400">{formData.explanation}</p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
               </div>
 
               <div className="flex gap-2">

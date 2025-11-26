@@ -37,9 +37,19 @@ export function Dashboard() {
       <header className="border-b sticky top-0 bg-background z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex-1 min-w-0">
-              <h1 className="text-lg sm:text-2xl font-bold truncate">Language Learning Platform</h1>
-              <p className="text-xs sm:text-sm text-muted-foreground truncate">Welcome back, {profile?.full_name || 'Learner'}!</p>
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <Link to="/profile">
+                <Avatar className="h-10 w-10 sm:h-12 sm:w-12 cursor-pointer hover:ring-2 hover:ring-primary transition-all">
+                  <AvatarImage src={profile?.avatar_url || undefined} />
+                  <AvatarFallback className="text-sm sm:text-base">
+                    {profile?.full_name?.[0]?.toUpperCase() || 'U'}
+                  </AvatarFallback>
+                </Avatar>
+              </Link>
+              <div className="min-w-0">
+                <h1 className="text-lg sm:text-2xl font-bold truncate">Language Learning Platform</h1>
+                <p className="text-xs sm:text-sm text-muted-foreground truncate">Welcome back, {profile?.full_name || 'Learner'}!</p>
+              </div>
             </div>
 
             {/* Desktop Navigation */}

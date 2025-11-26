@@ -15,6 +15,7 @@ export interface Database {
           email: string
           full_name: string | null
           avatar_url: string | null
+          phone_number: string | null
           role: 'student' | 'admin'
           payment_status: 'paid' | 'unpaid' | 'trial'
           trial_end_date: string | null
@@ -32,6 +33,7 @@ export interface Database {
           email: string
           full_name?: string | null
           avatar_url?: string | null
+          phone_number?: string | null
           role?: 'student' | 'admin'
           payment_status?: 'paid' | 'unpaid' | 'trial'
           trial_end_date?: string | null
@@ -49,6 +51,7 @@ export interface Database {
           email?: string
           full_name?: string | null
           avatar_url?: string | null
+          phone_number?: string | null
           role?: 'student' | 'admin'
           payment_status?: 'paid' | 'unpaid' | 'trial'
           trial_end_date?: string | null
